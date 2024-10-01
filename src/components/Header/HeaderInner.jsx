@@ -23,50 +23,7 @@ const HeaderInner = () => {
       <div className="container">
         <div className="cat-nav-head">
           <div className="row">
-            <div className="col-lg-3">
-              <div
-                className="all-category"
-                style={categoryStyle}
-                onMouseEnter={() => setIsHovered(true)}
-                onMouseLeave={() => setIsHovered(false)}
-              >
-                <h3 className="cat-heading">
-                  <i className="fa fa-bars" aria-hidden="true"></i>CATEGORIES
-                </h3>
-                <ul className="main-category" style={mainCategoryStyle}>
-                  <li>
-                    <a href="#">
-                      New Arrivals{" "}
-                      <i className="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      Hombres{" "}
-                      <i className="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      Mujeres{" "}
-                      <i className="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      Niños{" "}
-                      <i className="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-                  </li>
-                  <li>
-                    <a href="#">
-                      Zapátos{" "}
-                      <i className="fa fa-angle-right" aria-hidden="true"></i>
-                    </a>
-                  </li>
-                </ul>
-              </div>
-            </div>
+            <div className="col-lg-2"></div>
             <div className="col-lg-9 col-12">
               <div className="menu-area">
                 <nav className="navbar navbar-expand-lg">

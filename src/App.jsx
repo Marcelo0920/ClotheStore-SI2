@@ -15,6 +15,8 @@ import SucursalesEditListPage from "./pages/SucursalesEditListPage";
 import AlmacenesEditListPage from "./pages/AlmacenesEditListPage";
 import CajasEditListPage from "./pages/CajasEditListPage";
 import CategoriesEditListPage from "./pages/CategoriesEditListPage";
+import AperturarCajaPage from "./pages/AperturarCajaPage";
+import HistorialVentasPage from "./pages/HistorialVentasPage";
 
 const App = () => {
   return (
@@ -35,6 +37,8 @@ const App = () => {
         <Route path="/almacenes" element={<AlmacenesEditListPage />} />
         <Route path="/cajas" element={<CajasEditListPage />} />
         <Route path="/categories" element={<CategoriesEditListPage />} />
+        <Route path="/cajasapertura" element={<AperturarCajaPage />} />
+        <Route path="/historialventas" element={<HistorialVentasPage />} />
       </Routes>
     </BrowserRouter>
   );

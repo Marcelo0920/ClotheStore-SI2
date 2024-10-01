@@ -15,7 +15,7 @@ const SucursalList = ({ sucursales, onEdit, onDelete }) => {
                   <th className="text-center">ACCIONES</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-center">
                 {sucursales.map((sucursal) => (
                   <tr key={sucursal.id}>
                     <td>{sucursal.id}</td>
