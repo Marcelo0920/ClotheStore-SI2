@@ -1,10 +1,12 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const CajaItem = ({ caja, onAperturar, onCerrar, onArquear }) => {
+  console.log(caja);
   return (
     <tr>
-      <td>{caja.nombre}</td>
-      <td>{caja.sucursal}</td>
+      <td>{caja.numero}</td>
+      <td>{caja.id_sucursal.nombre}</td>
       <td>{caja.estado}</td>
       <td className="text-center">
         <button
@@ -44,6 +46,13 @@ const CajaItem = ({ caja, onAperturar, onCerrar, onArquear }) => {
       </td>
     </tr>
   );
+};
+
+CajaItem.propTypes = {
+  caja: PropTypes.object.isRequired,
+  onAperturar: PropTypes.func.isRequired,
+  onCerrar: PropTypes.func.isRequired,
+  onArquear: PropTypes.func.isRequired,
 };
 
 export default CajaItem;

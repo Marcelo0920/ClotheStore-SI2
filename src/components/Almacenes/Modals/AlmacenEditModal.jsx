@@ -1,7 +1,16 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { updateWarehouse } from "../../../actions/almacen";
 
-const AlmacenEditModal = ({ open, onClose, onSave, almacen, sucursales }) => {
+const AlmacenEditModal = ({
+  open,
+  onClose,
+  updateWarehouse,
+  almacen,
+  sucursales,
+}) => {
   const [formData, setFormData] = useState({
     id: "",
     numero: "",
@@ -32,7 +41,7 @@ const AlmacenEditModal = ({ open, onClose, onSave, almacen, sucursales }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    updateWarehouse(formData.id, formData);
     onClose();
   };
 
@@ -89,4 +98,12 @@ const AlmacenEditModal = ({ open, onClose, onSave, almacen, sucursales }) => {
   );
 };
 
-export default AlmacenEditModal;
+AlmacenEditModal.propTypes = {
+  updateWarehouse: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  almacen: PropTypes.object,
+  sucursales: PropTypes.array.isRequired,
+};
+
+export default connect(null, { updateWarehouse })(AlmacenEditModal);

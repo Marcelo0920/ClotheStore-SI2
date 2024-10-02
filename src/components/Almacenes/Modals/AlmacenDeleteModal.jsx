@@ -1,11 +1,21 @@
 import React from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { deleteWarehouse } from "../../../actions/almacen";
 
-const AlmacenDeleteModal = ({ open, onClose, onConfirm, almacenNumero }) => {
+const AlmacenDeleteModal = ({ open, onClose, deleteWarehouse, almacen }) => {
+  const handleDelete = () => {
+    if (almacen) {
+      deleteWarehouse(almacen.id);
+      onClose();
+    }
+  };
+
   return (
     <ProviderModal open={open} onClose={onClose} title="Eliminar Almacén">
       <p>
-        ¿Está seguro que desea eliminar el almacén número "{almacenNumero}"?
+        ¿Está seguro que desea eliminar el almacén número "{almacen?.numero}"?
       </p>
       <div className="modal-actions">
         <button
@@ -20,7 +30,7 @@ const AlmacenDeleteModal = ({ open, onClose, onConfirm, almacenNumero }) => {
           Cancelar
         </button>
         <button
-          onClick={onConfirm}
+          onClick={handleDelete}
           className="btn"
           style={{ backgroundColor: "#dc3545", color: "white" }}
         >
@@ -31,4 +41,11 @@ const AlmacenDeleteModal = ({ open, onClose, onConfirm, almacenNumero }) => {
   );
 };
 
-export default AlmacenDeleteModal;
+AlmacenDeleteModal.propTypes = {
+  deleteWarehouse: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  almacen: PropTypes.object,
+};
+
+export default connect(null, { deleteWarehouse })(AlmacenDeleteModal);

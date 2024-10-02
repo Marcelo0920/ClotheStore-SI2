@@ -14,7 +14,7 @@ const RoleList = ({ roles, onEdit, onDelete }) => {
                   <th className="text-center">ACCIONES</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-center">
                 {roles.map((role) => (
                   <tr key={role.id}>
                     <td>{role.id}</td>

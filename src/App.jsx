@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Home from "./pages/Home";
 import Login from "./pages/auth/Login";
@@ -17,8 +17,23 @@ import CajasEditListPage from "./pages/CajasEditListPage";
 import CategoriesEditListPage from "./pages/CategoriesEditListPage";
 import AperturarCajaPage from "./pages/AperturarCajaPage";
 import HistorialVentasPage from "./pages/HistorialVentasPage";
+import UserEditListPage from "./pages/UserEditListPage";
+import ClientEditListPage from "./pages/ClientEditListPage";
+import ProtectedRoute from "./security/ProtectedRoute";
+
+import store from "./store";
+import { loadUser } from "./actions/auth";
+import setAuthToken from "./utils/setAuthToken";
+
+if (localStorage.getItem("token")) {
+  setAuthToken(localStorage.getItem("token"));
+}
 
 const App = () => {
+  useEffect(() => {
+    store.dispatch(loadUser());
+  }, []);
+
   return (
     <BrowserRouter>
       <Routes>
@@ -27,18 +42,103 @@ const App = () => {
         <Route path="/register" element={<Register />} />
         <Route path="/cart" element={<CartPage />} />
         <Route path="/checkout" element={<CheckOutPage />} />
-        <Route path="/createproduct" element={<CreateProductPage />} />
-        <Route path="/createclient" element={<CreateClientPage />} />
-        <Route path="/producteditlist" element={<ProductEditListPage />} />
-        <Route path="/providers" element={<ProviderEditListPage />} />
-        <Route path="/pedidos" element={<PedidosEditListPage />} />
-        <Route path="/roles" element={<RolesEditListPage />} />
-        <Route path="/sucursales" element={<SucursalesEditListPage />} />
-        <Route path="/almacenes" element={<AlmacenesEditListPage />} />
-        <Route path="/cajas" element={<CajasEditListPage />} />
-        <Route path="/categories" element={<CategoriesEditListPage />} />
-        <Route path="/cajasapertura" element={<AperturarCajaPage />} />
-        <Route path="/historialventas" element={<HistorialVentasPage />} />
+
+        <Route
+          path="/producteditlist"
+          element={
+            <ProtectedRoute>
+              <ProductEditListPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/providers"
+          element={
+            <ProtectedRoute>
+              <ProviderEditListPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/pedidos"
+          element={
+            <ProtectedRoute>
+              <PedidosEditListPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/roles"
+          element={
+            <ProtectedRoute>
+              <RolesEditListPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/sucursales"
+          element={
+            <ProtectedRoute>
+              <SucursalesEditListPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/almacenes"
+          element={
+            <ProtectedRoute>
+              <AlmacenesEditListPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cajas"
+          element={
+            <ProtectedRoute>
+              <CajasEditListPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/categories"
+          element={
+            <ProtectedRoute>
+              <CategoriesEditListPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cajasapertura"
+          element={
+            <ProtectedRoute>
+              <AperturarCajaPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/historialventas"
+          element={
+            <ProtectedRoute>
+              <HistorialVentasPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/users"
+          element={
+            <ProtectedRoute>
+              <UserEditListPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/clients"
+          element={
+            <ProtectedRoute>
+              <ClientEditListPage />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
     </BrowserRouter>
   );

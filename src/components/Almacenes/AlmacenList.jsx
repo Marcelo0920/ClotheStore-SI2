@@ -17,7 +17,7 @@ const AlmacenList = ({ almacenes, onEdit, onDelete }) => {
                   <th className="text-center">ACCIONES</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-center">
                 {almacenes.map((almacen) => (
                   <tr key={almacen.id}>
                     <td>{almacen.id}</td>

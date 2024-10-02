@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { createSucursal } from "../../../actions/sucursal";
 
-const SucursalCreateModal = ({ open, onClose, onSave }) => {
+const SucursalCreateModal = ({ open, onClose, createSucursal }) => {
   const [formData, setFormData] = useState({
     nombre: "",
     direccion: "",
@@ -17,7 +20,7 @@ const SucursalCreateModal = ({ open, onClose, onSave }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    createSucursal(formData);
     setFormData({ nombre: "", direccion: "" });
     onClose();
   };
@@ -55,4 +58,10 @@ const SucursalCreateModal = ({ open, onClose, onSave }) => {
   );
 };
 
-export default SucursalCreateModal;
+SucursalCreateModal.propTypes = {
+  createSucursal: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+export default connect(null, { createSucursal })(SucursalCreateModal);

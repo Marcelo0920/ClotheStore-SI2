@@ -14,8 +14,11 @@ import "./styles/animate.css";
 import "./styles/jquery-ui.css";
 import "./styles/jquery.fancybox.min.css";
 
+import store from "./store";
+import { Provider } from "react-redux";
+
 createRoot(document.getElementById("root")).render(
-  <StrictMode>
+  <Provider store={store}>
     <App />
-  </StrictMode>
+  </Provider>
 );

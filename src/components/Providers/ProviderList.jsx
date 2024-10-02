@@ -16,7 +16,7 @@ const ProviderList = ({ providers, onEdit, onDelete }) => {
                   <th className="text-center">ACTIONS</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-center">
                 {providers.map((provider) => (
                   <ProviderItem
                     key={provider.id}

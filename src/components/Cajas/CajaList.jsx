@@ -15,7 +15,7 @@ const CajaList = ({ cajas, onEdit, onDelete }) => {
                   <th className="text-center">ACCIONES</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-center">
                 {cajas.map((caja) => (
                   <tr key={caja.id}>
                     <td>{caja.id}</td>

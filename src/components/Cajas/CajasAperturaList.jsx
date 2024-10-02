@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 import CajaItem from "./CajaItem";
 
 const CajasAperturaList = ({ cajas, onAperturar, onCerrar, onArquear }) => {
@@ -16,8 +17,8 @@ const CajasAperturaList = ({ cajas, onAperturar, onCerrar, onArquear }) => {
                   <th className="text-center">ACCIONES</th>
                 </tr>
               </thead>
-              <tbody>
-                {cajas.map((caja) => (
+              <tbody className="text-center">
+                {cajas?.map((caja) => (
                   <CajaItem
                     key={caja.id}
                     caja={caja}
@@ -33,6 +34,13 @@ const CajasAperturaList = ({ cajas, onAperturar, onCerrar, onArquear }) => {
       </div>
     </div>
   );
+};
+
+CajasAperturaList.propTypes = {
+  cajas: PropTypes.array.isRequired,
+  onAperturar: PropTypes.func.isRequired,
+  onCerrar: PropTypes.func.isRequired,
+  onArquear: PropTypes.func.isRequired,
 };
 
 export default CajasAperturaList;

@@ -1,12 +1,15 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { createRole } from "../../../actions/role";
 
-const RoleCreateModal = ({ open, onClose, onSave }) => {
+const RoleCreateModal = ({ open, onClose, createRole }) => {
   const [nombre, setNombre] = useState("");
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({ nombre });
+    createRole({ nombre });
     setNombre("");
     onClose();
   };
@@ -35,4 +38,10 @@ const RoleCreateModal = ({ open, onClose, onSave }) => {
   );
 };
 
-export default RoleCreateModal;
+RoleCreateModal.propTypes = {
+  createRole: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+export default connect(null, { createRole })(RoleCreateModal);

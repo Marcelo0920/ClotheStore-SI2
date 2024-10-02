@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { createCaja } from "../../../actions/caja";
 
-const CajaCreateModal = ({ open, onClose, onSave, sucursales }) => {
+const CajaCreateModal = ({ open, onClose, createCaja, sucursales }) => {
   const [formData, setFormData] = useState({
     numero: "",
     id_sucursal: "",
@@ -17,7 +20,7 @@ const CajaCreateModal = ({ open, onClose, onSave, sucursales }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    createCaja(formData);
     setFormData({ numero: "", id_sucursal: "" });
     onClose();
   };
@@ -60,4 +63,11 @@ const CajaCreateModal = ({ open, onClose, onSave, sucursales }) => {
   );
 };
 
-export default CajaCreateModal;
+CajaCreateModal.propTypes = {
+  createCaja: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  sucursales: PropTypes.array.isRequired,
+};
+
+export default connect(null, { createCaja })(CajaCreateModal);

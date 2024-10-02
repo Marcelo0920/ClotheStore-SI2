@@ -1,10 +1,20 @@
 import React from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { deleteCaja } from "../../../actions/caja";
 
-const CajaDeleteModal = ({ open, onClose, onConfirm, cajaNumero }) => {
+const CajaDeleteModal = ({ open, onClose, deleteCaja, caja }) => {
+  const handleDelete = () => {
+    if (caja) {
+      deleteCaja(caja.id);
+      onClose();
+    }
+  };
+
   return (
     <ProviderModal open={open} onClose={onClose} title="Eliminar Caja">
-      <p>¿Está seguro que desea eliminar la caja número "{cajaNumero}"?</p>
+      <p>¿Está seguro que desea eliminar la caja número "{caja?.numero}"?</p>
       <div className="modal-actions">
         <button
           onClick={onClose}
@@ -18,7 +28,7 @@ const CajaDeleteModal = ({ open, onClose, onConfirm, cajaNumero }) => {
           Cancelar
         </button>
         <button
-          onClick={onConfirm}
+          onClick={handleDelete}
           className="btn"
           style={{ backgroundColor: "#dc3545", color: "white" }}
         >
@@ -29,4 +39,11 @@ const CajaDeleteModal = ({ open, onClose, onConfirm, cajaNumero }) => {
   );
 };
 
-export default CajaDeleteModal;
+CajaDeleteModal.propTypes = {
+  deleteCaja: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  caja: PropTypes.object,
+};
+
+export default connect(null, { deleteCaja })(CajaDeleteModal);

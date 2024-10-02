@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { updateCaja } from "../../../actions/caja";
 
-const CajaEditModal = ({ open, onClose, onSave, caja, sucursales }) => {
+const CajaEditModal = ({ open, onClose, updateCaja, caja, sucursales }) => {
   const [formData, setFormData] = useState({
     id: "",
     numero: "",
@@ -28,7 +31,7 @@ const CajaEditModal = ({ open, onClose, onSave, caja, sucursales }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    updateCaja(formData.id, formData);
     onClose();
   };
 
@@ -70,4 +73,12 @@ const CajaEditModal = ({ open, onClose, onSave, caja, sucursales }) => {
   );
 };
 
-export default CajaEditModal;
+CajaEditModal.propTypes = {
+  updateCaja: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  caja: PropTypes.object,
+  sucursales: PropTypes.array.isRequired,
+};
+
+export default connect(null, { updateCaja })(CajaEditModal);

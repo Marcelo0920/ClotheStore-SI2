@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { updateRole } from "../../../actions/role";
 
-const RoleEditModal = ({ open, onClose, onSave, role }) => {
+const RoleEditModal = ({ open, onClose, updateRole, role }) => {
   const [nombre, setNombre] = useState("");
 
   useEffect(() => {
@@ -12,7 +15,7 @@ const RoleEditModal = ({ open, onClose, onSave, role }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave({ id: role.id, nombre });
+    updateRole(role.id, { nombre });
     onClose();
   };
 
@@ -40,4 +43,11 @@ const RoleEditModal = ({ open, onClose, onSave, role }) => {
   );
 };
 
-export default RoleEditModal;
+RoleEditModal.propTypes = {
+  updateRole: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  role: PropTypes.object,
+};
+
+export default connect(null, { updateRole })(RoleEditModal);

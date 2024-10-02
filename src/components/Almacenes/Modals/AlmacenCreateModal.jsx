@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { createWarehouse } from "../../../actions/almacen";
 
-const AlmacenCreateModal = ({ open, onClose, onSave, sucursales }) => {
+const AlmacenCreateModal = ({ open, onClose, createWarehouse, sucursales }) => {
   const [formData, setFormData] = useState({
     numero: "",
     tipo: "",
@@ -22,7 +25,7 @@ const AlmacenCreateModal = ({ open, onClose, onSave, sucursales }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    createWarehouse(formData);
     setFormData({ numero: "", tipo: "", descripcion: "", id_sucursal: "" });
     onClose();
   };
@@ -80,4 +83,11 @@ const AlmacenCreateModal = ({ open, onClose, onSave, sucursales }) => {
   );
 };
 
-export default AlmacenCreateModal;
+AlmacenCreateModal.propTypes = {
+  createWarehouse: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  sucursales: PropTypes.array.isRequired,
+};
+
+export default connect(null, { createWarehouse })(AlmacenCreateModal);
