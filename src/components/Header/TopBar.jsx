@@ -1,7 +1,11 @@
 import React from "react";
 import { Link } from "react-router-dom";
 
-const TopBar = () => {
+import { logout } from "../../actions/auth";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
+const TopBar = ({ isAuthenticated, logout }) => {
   return (
     <div className="topbar">
       <div className="container">
@@ -23,7 +27,11 @@ const TopBar = () => {
               <ul className="list-main">
                 <li>
                   <i className="ti-power-off"></i>
-                  <Link to="/login">Iniciar Sesion</Link>
+                  {isAuthenticated ? (
+                    <Link onClick={logout}>Cerrar Sesion</Link>
+                  ) : (
+                    <Link to="/login">Iniciar Sesion</Link>
+                  )}
                 </li>
               </ul>
             </div>
@@ -34,4 +42,13 @@ const TopBar = () => {
   );
 };
 
-export default TopBar;
+const mapStateToProps = (state) => ({
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+TopBar.propTypes = {
+  logout: PropTypes.func.isRequired,
+  isAuthenticated: PropTypes.bool,
+};
+
+export default connect(mapStateToProps, { logout })(TopBar);

@@ -80,6 +80,7 @@ export const setDefaultSession = () => (dispatch) => {
 
 // LOGOUT
 export const logout = () => (dispatch) => {
+  console.log("logging out");
   localStorage.removeItem("token");
   localStorage.removeItem("username");
 

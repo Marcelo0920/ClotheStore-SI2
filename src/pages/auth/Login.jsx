@@ -20,7 +20,6 @@ const Login = ({ login, isAuthenticated, loading, error }) => {
     password: "",
   });
 
-
   useEffect(() => {
     if (error == "Bad Login") {
       toast.error("Error al iniciar sesion", { theme: "light" });
