@@ -1,6 +1,17 @@
 import React from "react";
+import { connect } from "react-redux";
 
-const PedidoList = ({ pedidos, onEdit, onDelete }) => {
+const PedidoList = ({ pedidos, onEdit, onDelete, warehouses, providers }) => {
+  const getWarehouseName = (id) => {
+    const warehouse = warehouses.find((w) => w.id === id);
+    return warehouse ? warehouse.nombre : "Unknown";
+  };
+
+  const getProviderName = (id) => {
+    const provider = providers.find((p) => p.id === id);
+    return provider ? provider.nombre : "Unknown";
+  };
+
   return (
     <div className="pedido-list section">
       <div className="container">
@@ -16,13 +27,14 @@ const PedidoList = ({ pedidos, onEdit, onDelete }) => {
                   <th className="text-center">ACCIONES</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-center">
                 {pedidos.map((pedido) => (
                   <tr key={pedido.id}>
                     <td>{pedido.id}</td>
-                    <td>{pedido.id_almacen}</td>
-                    <td>{pedido.id_proveedor}</td>
-                    <td>{pedido.productos.length} productos</td>
+                    <td>{pedido.id_almacen?.tipo}</td>
+                    <td>{pedido.id_proveedor?.nombre}</td>
+
+                    <td> productos</td>
                     <td className="action">
                       <button
                         onClick={() => onEdit(pedido)}
@@ -54,4 +66,9 @@ const PedidoList = ({ pedidos, onEdit, onDelete }) => {
   );
 };
 
-export default PedidoList;
+const mapStateToProps = (state) => ({
+  warehouses: state.almacen.warehouses,
+  providers: state.provider.providers,
+});
+
+export default connect(mapStateToProps)(PedidoList);

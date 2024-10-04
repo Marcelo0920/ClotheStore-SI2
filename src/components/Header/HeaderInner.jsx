@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Link } from "react-router-dom";
 
 const HeaderInner = () => {
   const [isHovered, setIsHovered] = useState(false);
@@ -31,45 +32,96 @@ const HeaderInner = () => {
                     <div className="nav-inner">
                       <ul className="nav main-menu menu navbar-nav">
                         <li className="active">
-                          <a href="#">Home</a>
+                          <Link to="/">Inicio</Link>
                         </li>
                         <li>
-                          <a href="#">Product</a>
+                          <a>
+                            Productos<i className="ti-angle-down"></i>
+                          </a>
+                          <ul className="dropdown">
+                            <li>
+                              <Link to="/categories">Categorias</Link>
+                            </li>
+                            <li>
+                              <Link to="/producteditlist">Lista Productos</Link>
+                            </li>
+                            <li>
+                              <Link to="/pedidos">Pedido Productos</Link>
+                            </li>
+                          </ul>
                         </li>
                         <li>
-                          <a href="#">Service</a>
+                          <a>
+                            Cajas<i className="ti-angle-down"></i>
+                          </a>
+                          <ul className="dropdown">
+                            <li>
+                              <Link to="/cajas">Lista Cajas</Link>
+                            </li>
+                            <li>
+                              <Link to="/cajasapertura">Apertura Cajas</Link>
+                            </li>
+                          </ul>
                         </li>
                         <li>
-                          <a href="#">
+                          <a>
+                            Ventas<i className="ti-angle-down"></i>
+                          </a>
+                          <ul className="dropdown">
+                            <li>
+                              <Link to="/historialventas">Lista Ventas</Link>
+                            </li>
+                            <li>
+                              <Link to="/facturas">Lista Facturas</Link>
+                            </li>
+                          </ul>
+                        </li>
+                        <li>
+                          <a>
                             Shop<i className="ti-angle-down"></i>
-                            <span className="new">New</span>
+                            <span className="new">Nuevo</span>
                           </a>
                           <ul className="dropdown">
                             <li>
-                              <a href="cart.html">Cart</a>
+                              <Link to="/cart">Carrito</Link>
                             </li>
                             <li>
-                              <a href="checkout.html">Checkout</a>
+                              <Link to="/checkout">Checkout</Link>
+                            </li>
+                          </ul>
+                        </li>
+
+                        <li>
+                          <a>
+                            Infraestructura<i className="ti-angle-down"></i>
+                          </a>
+                          <ul className="dropdown">
+                            <li>
+                              <Link to="/sucursales">Sucursales</Link>
+                            </li>
+                            <li>
+                              <Link to="/almacenes">Almacenes</Link>
+                            </li>
+                            <li>
+                              <Link to="/providers">Proveedores</Link>
                             </li>
                           </ul>
                         </li>
                         <li>
-                          <a href="#">Pages</a>
-                        </li>
-                        <li>
-                          <a href="#">
-                            Blog<i className="ti-angle-down"></i>
+                          <a>
+                            Usuarios<i className="ti-angle-down"></i>
                           </a>
                           <ul className="dropdown">
                             <li>
-                              <a href="blog-single-sidebar.html">
-                                Blog Single Sidebar
-                              </a>
+                              <Link to="/clients">Clientes</Link>
+                            </li>
+                            <li>
+                              <Link to="/users">Usuarios</Link>
+                            </li>
+                            <li>
+                              <Link to="/roles">Roles</Link>
                             </li>
                           </ul>
-                        </li>
-                        <li>
-                          <a href="contact.html">Contact Us</a>
                         </li>
                       </ul>
                     </div>

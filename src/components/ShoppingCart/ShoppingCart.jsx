@@ -1,32 +1,50 @@
 import React from "react";
+import { connect } from "react-redux";
+import {
+  removeFromCart,
+  updateCartItemQuantity,
+  clearCart,
+} from "../../actions/cart";
+import { Link } from "react-router-dom";
 
-const ShoppingCart = () => {
-  const cartItems = [
-    {
-      id: 1,
-      name: "Women Dress",
-      description: "Maboriosam in a tonto nesciung eget distingy magndapibus.",
-      price: 110.0,
-      quantity: 1,
-      total: 220.88,
-    },
-    {
-      id: 2,
-      name: "Women Dress",
-      description: "Maboriosam in a tonto nesciung eget distingy magndapibus.",
-      price: 110.0,
-      quantity: 2,
-      total: 220.88,
-    },
-    {
-      id: 3,
-      name: "Women Dress",
-      description: "Maboriosam in a tonto nesciung eget distingy magndapibus.",
-      price: 110.0,
-      quantity: 3,
-      total: 220.88,
-    },
-  ];
+const ShoppingCart = ({
+  cartItems,
+  total,
+  removeFromCart,
+  updateCartItemQuantity,
+  clearCart,
+}) => {
+  const handleQuantityChange = (itemId, newQuantity) => {
+    if (newQuantity > 0) {
+      updateCartItemQuantity(itemId, newQuantity);
+    }
+  };
+
+  const handleRemoveItem = (itemId) => {
+    removeFromCart(itemId);
+  };
+
+  const arrayBufferToBase64 = (buffer) => {
+    let binary = "";
+    const bytes = new Uint8Array(buffer);
+    const len = bytes.byteLength;
+    for (let i = 0; i < len; i++) {
+      binary += String.fromCharCode(bytes[i]);
+    }
+    return window.btoa(binary);
+  };
+
+  const getImageSource = (foto) => {
+    if (typeof foto === "string") {
+      return `data:image/jpeg;base64,${foto}`;
+    } else if (foto instanceof ArrayBuffer) {
+      return `data:image/jpeg;base64,${arrayBufferToBase64(foto)}`;
+    } else if (Array.isArray(foto)) {
+      const uint8Array = new Uint8Array(foto);
+      return `data:image/jpeg;base64,${arrayBufferToBase64(uint8Array.buffer)}`;
+    }
+    return null;
+  };
 
   return (
     <div className="shopping-cart section">
@@ -50,16 +68,27 @@ const ShoppingCart = () => {
                 {cartItems.map((item) => (
                   <tr key={item.id}>
                     <td className="image" data-title="No">
-                      <img src="https://via.placeholder.com/100x100" alt="#" />
+                      <img
+                        src={
+                          getImageSource(item.foto) ||
+                          "https://via.placeholder.com/100x100"
+                        }
+                        alt={item.nombre}
+                        style={{
+                          width: "100px",
+                          height: "100px",
+                          objectFit: "cover",
+                        }}
+                      />
                     </td>
                     <td className="product-des" data-title="Description">
                       <p className="product-name">
-                        <a href="#">{item.name}</a>
+                        <a href="#">{item.nombre}</a>
                       </p>
-                      <p className="product-des">{item.description}</p>
+                      <p className="product-des">{item.descripcion}</p>
                     </td>
                     <td className="price" data-title="Price">
-                      <span>${item.price.toFixed(2)} </span>
+                      <span>${item.precio.toFixed(2)} </span>
                     </td>
                     <td className="qty" data-title="Qty">
                       <div className="input-group">
@@ -68,8 +97,9 @@ const ShoppingCart = () => {
                             type="button"
                             className="btn btn-primary btn-number"
                             disabled={item.quantity === 1}
-                            data-type="minus"
-                            data-field={`quant[${item.id}]`}
+                            onClick={() =>
+                              handleQuantityChange(item.id, item.quantity - 1)
+                            }
                           >
                             <i className="ti-minus"></i>
                           </button>
@@ -81,13 +111,15 @@ const ShoppingCart = () => {
                           data-min="1"
                           data-max="100"
                           value={item.quantity}
+                          readOnly
                         />
                         <div className="button plus">
                           <button
                             type="button"
                             className="btn btn-primary btn-number"
-                            data-type="plus"
-                            data-field={`quant[${item.id}]`}
+                            onClick={() =>
+                              handleQuantityChange(item.id, item.quantity + 1)
+                            }
                           >
                             <i className="ti-plus"></i>
                           </button>
@@ -95,10 +127,10 @@ const ShoppingCart = () => {
                       </div>
                     </td>
                     <td className="total-amount" data-title="Total">
-                      <span>${item.total.toFixed(2)}</span>
+                      <span>${(item.precio * item.quantity).toFixed(2)}</span>
                     </td>
                     <td className="action" data-title="Remove">
-                      <a href="#">
+                      <a href="#" onClick={() => handleRemoveItem(item.id)}>
                         <i className="ti-trash remove-icon"></i>
                       </a>
                     </td>
@@ -116,13 +148,13 @@ const ShoppingCart = () => {
                   <div className="left">
                     <div className="coupon">
                       <form action="#" target="_blank">
-                        <input name="Coupon" placeholder="Enter Your Coupon" />
-                        <button className="btn">Apply</button>
+                        <input name="Coupon" placeholder="Ingresa tu cupon" />
+                        <button className="btn">Aplicar</button>
                       </form>
                     </div>
                     <div className="checkbox">
                       <label className="checkbox-inline" htmlFor="2">
-                        <input name="news" id="2" type="checkbox" /> Shipping
+                        <input name="news" id="2" type="checkbox" /> Envio
                         (+10$)
                       </label>
                     </div>
@@ -132,24 +164,24 @@ const ShoppingCart = () => {
                   <div className="right">
                     <ul>
                       <li>
-                        Cart Subtotal<span>$330.00</span>
+                        Total Carrito<span>${total.toFixed(2)}</span>
                       </li>
                       <li>
-                        Shipping<span>Free</span>
+                        Envio<span>Gratuito</span>
                       </li>
                       <li>
-                        You Save<span>$20.00</span>
+                        Ahorras<span>$0.00</span>
                       </li>
                       <li className="last">
-                        You Pay<span>$310.00</span>
+                        Pagas<span>${total.toFixed(2)}</span>
                       </li>
                     </ul>
                     <div className="button5">
-                      <a href="#" className="btn">
+                      <Link to="/checkout" className="btn">
                         Checkout
-                      </a>
-                      <a href="#" className="btn">
-                        Continue shopping
+                      </Link>
+                      <a className="btn" onClick={() => clearCart()}>
+                        Limpiar Carrito
                       </a>
                     </div>
                   </div>
@@ -163,4 +195,13 @@ const ShoppingCart = () => {
   );
 };
 
-export default ShoppingCart;
+const mapStateToProps = (state) => ({
+  cartItems: state.cart.items,
+  total: state.cart.total,
+});
+
+export default connect(mapStateToProps, {
+  removeFromCart,
+  updateCartItemQuantity,
+  clearCart,
+})(ShoppingCart);

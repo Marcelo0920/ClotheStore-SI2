@@ -1,12 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { createPedido } from "../../../actions/pedido";
+import { getProducts } from "../../../actions/product";
 
-const CrearPedidoModal = ({ open, onClose, onSave, providers, warehouses }) => {
+const CrearPedidoModal = ({
+  open,
+  onClose,
+  providers,
+  warehouses,
+  products,
+  createPedido,
+  getProducts,
+}) => {
   const [formData, setFormData] = useState({
     id_almacen: "",
     id_proveedor: "",
-    productos: [{ id_producto: "", cantidad: "" }],
+    listaProductos: [{ id_producto: "", cantidad: 0 }],
   });
+
+  useEffect(() => {
+    getProducts();
+  }, [getProducts]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -18,7 +33,7 @@ const CrearPedidoModal = ({ open, onClose, onSave, providers, warehouses }) => {
 
   const handleProductChange = (index, e) => {
     const { name, value } = e.target;
-    const updatedProducts = formData.productos.map((product, i) => {
+    const updatedListaProductos = formData.listaProductos.map((product, i) => {
       if (i === index) {
         return { ...product, [name]: value };
       }
@@ -26,27 +41,30 @@ const CrearPedidoModal = ({ open, onClose, onSave, providers, warehouses }) => {
     });
     setFormData((prevState) => ({
       ...prevState,
-      productos: updatedProducts,
+      listaProductos: updatedListaProductos,
     }));
   };
 
   const addProduct = () => {
     setFormData((prevState) => ({
       ...prevState,
-      productos: [...prevState.productos, { id_producto: "", cantidad: "" }],
+      listaProductos: [
+        ...prevState.listaProductos,
+        { id_producto: "", cantidad: 0 },
+      ],
     }));
   };
 
   const removeProduct = (index) => {
     setFormData((prevState) => ({
       ...prevState,
-      productos: prevState.productos.filter((_, i) => i !== index),
+      listaProductos: prevState.listaProductos.filter((_, i) => i !== index),
     }));
   };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    createPedido(formData);
     onClose();
   };
 
@@ -63,7 +81,7 @@ const CrearPedidoModal = ({ open, onClose, onSave, providers, warehouses }) => {
             <option value="">Seleccionar Almacén</option>
             {warehouses.map((warehouse) => (
               <option key={warehouse.id} value={warehouse.id}>
-                {warehouse.nombre}
+                {warehouse?.tipo}
               </option>
             ))}
           </select>
@@ -83,23 +101,26 @@ const CrearPedidoModal = ({ open, onClose, onSave, providers, warehouses }) => {
           </select>
 
           <h4>Productos</h4>
-          {formData.productos.map((product, index) => (
+          {formData.listaProductos.map((product, index) => (
             <div key={index} className="product-item">
-              <input
-                type="text"
+              <select
                 name="id_producto"
                 value={product.id_producto}
                 onChange={(e) => handleProductChange(index, e)}
-                placeholder="ID Producto"
-                required
-              />
+              >
+                <option value="">Seleccionar Producto</option>
+                {products.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.nombre}
+                  </option>
+                ))}
+              </select>
               <input
                 type="number"
                 name="cantidad"
                 value={product.cantidad}
                 onChange={(e) => handleProductChange(index, e)}
                 placeholder="Cantidad"
-                required
               />
               {index > 0 && (
                 <button type="button" onClick={() => removeProduct(index)}>
@@ -120,4 +141,10 @@ const CrearPedidoModal = ({ open, onClose, onSave, providers, warehouses }) => {
   );
 };
 
-export default CrearPedidoModal;
+const mapStateToProps = (state) => ({
+  products: state.product.products,
+});
+
+export default connect(mapStateToProps, { createPedido, getProducts })(
+  CrearPedidoModal
+);

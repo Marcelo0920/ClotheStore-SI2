@@ -1,12 +1,18 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { updatePedido } from "../../../actions/pedido";
+import { getProducts } from "../../../actions/product";
 
 const PedidoEditModal = ({
   open,
   onClose,
-  onSave,
+  pedido,
   providers,
   warehouses,
-  pedido,
+  products,
+  updatePedido,
+  getProducts,
 }) => {
   const [formData, setFormData] = useState({
     id: "",
@@ -16,13 +22,14 @@ const PedidoEditModal = ({
   });
 
   useEffect(() => {
+    getProducts();
+  }, [getProducts]);
+
+  useEffect(() => {
     if (pedido) {
       setFormData(pedido);
     }
   }, [pedido]);
-
-  const onChange = (e) =>
-    setFormData({ ...formData, [e.target.name]: e.target.value });
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -62,88 +69,89 @@ const PedidoEditModal = ({
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    updatePedido(formData.id, formData);
     onClose();
   };
 
   if (!open) return null;
 
   return (
-    <div className="overlay">
-      <div className="modalContainer">
-        <p className="gameModalClose" onClick={onClose}>
-          X
-        </p>
-        <div className="modal-content">
-          <h3>Editar Proveedor</h3>
-          <form className="modal-form" onSubmit={handleSubmit}>
-            <div className="modal-input">
+    <ProviderModal open={open} onClose={onClose} title="Editar Pedido">
+      <form className="modal-form" onSubmit={handleSubmit}>
+        <div className="modal-input">
+          <select
+            name="id_almacen"
+            value={formData.id_almacen}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Seleccionar Almacén</option>
+            {warehouses.map((warehouse) => (
+              <option key={warehouse.id} value={warehouse.id}>
+                {warehouse.tipo}
+              </option>
+            ))}
+          </select>
+
+          <select
+            name="id_proveedor"
+            value={formData.id_proveedor}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Seleccionar Proveedor</option>
+            {providers.map((provider) => (
+              <option key={provider.id} value={provider.id}>
+                {provider.nombre}
+              </option>
+            ))}
+          </select>
+
+          <h4>Productos</h4>
+          {/* {formData.productos.map((product, index) => (
+            <div key={index} className="product-item">
               <select
-                name="id_almacen"
-                value={formData.id_almacen}
-                onChange={handleChange}
-                required
+                name="id_producto"
+                value={product.id_producto}
+                onChange={(e) => handleProductChange(index, e)}
               >
-                <option value="">Seleccionar Almacén</option>
-                {warehouses.map((warehouse) => (
-                  <option key={warehouse.id} value={warehouse.id}>
-                    {warehouse.nombre}
+                <option value="">Seleccionar Producto</option>
+                {products.map((p) => (
+                  <option key={p.id} value={p.id}>
+                    {p.nombre}
                   </option>
                 ))}
               </select>
-
-              <select
-                name="id_proveedor"
-                value={formData.id_proveedor}
-                onChange={handleChange}
-                required
-              >
-                <option value="">Seleccionar Proveedor</option>
-                {providers.map((provider) => (
-                  <option key={provider.id} value={provider.id}>
-                    {provider.nombre}
-                  </option>
-                ))}
-              </select>
-
-              <h4>Productos</h4>
-              {formData.productos.map((product, index) => (
-                <div key={index} className="product-item">
-                  <input
-                    type="text"
-                    name="id_producto"
-                    value={product.id_producto}
-                    onChange={(e) => handleProductChange(index, e)}
-                    placeholder="ID Producto"
-                    required
-                  />
-                  <input
-                    type="number"
-                    name="cantidad"
-                    value={product.cantidad}
-                    onChange={(e) => handleProductChange(index, e)}
-                    placeholder="Cantidad"
-                    required
-                  />
-                  {index > 0 && (
-                    <button type="button" onClick={() => removeProduct(index)}>
-                      Eliminar
-                    </button>
-                  )}
-                </div>
-              ))}
-              <button type="button" onClick={addProduct}>
-                Agregar Producto
-              </button>
+              <input
+                type="number"
+                name="cantidad"
+                value={product.cantidad}
+                onChange={(e) => handleProductChange(index, e)}
+                placeholder="Cantidad"
+              />
+              {index > 0 && (
+                <button type="button" onClick={() => removeProduct(index)}>
+                  Eliminar
+                </button>
+              )}
             </div>
-            <button type="submit" className="create-button">
-              Editar Pedido
-            </button>
-          </form>
+          ))} */}
+          <button type="button" onClick={addProduct}>
+            Agregar Producto
+          </button>
         </div>
-      </div>
-    </div>
+        <button type="submit" className="update-button">
+          Actualizar Pedido
+        </button>
+      </form>
+    </ProviderModal>
   );
 };
 
-export default PedidoEditModal;
+const mapStateToProps = (state) => ({
+  products: state.product.products,
+});
+
+export default connect(mapStateToProps, { updatePedido, getProducts })(
+  PedidoEditModal
+);

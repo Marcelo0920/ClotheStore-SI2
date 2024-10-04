@@ -13,6 +13,8 @@ export const getOrdenes = () => async (dispatch) => {
   try {
     const res = await axios.get("http://localhost:8080/orden/read");
 
+    console.log(res.data);
+
     dispatch({
       type: GET_ORDENES,
       payload: res.data,
@@ -51,24 +53,31 @@ export const createOrden = (formData) => async (dispatch) => {
       },
     };
 
+    console.log("Creating venta with data:", formData);
+
     const res = await axios.post(
       "http://localhost:8080/orden/crear",
       formData,
       config
     );
 
+    console.log("Server response:", res);
+
     dispatch({
       type: CREATE_ORDEN,
       payload: res.data,
     });
+
+    return res.data; // Return the created order data
   } catch (err) {
+    console.error("Error creating orden:", err);
     dispatch({
       type: ORDEN_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
+      payload: { msg: err.response ? err.response.data : "Server error" },
     });
+    throw err; // Re-throw the error so it can be caught in the component
   }
 };
-
 // Update order
 export const updateOrden = (id, formData) => async (dispatch) => {
   try {

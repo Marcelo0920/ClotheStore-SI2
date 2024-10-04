@@ -31,9 +31,11 @@ export default function (state = initialState, action) {
         loading: false,
       };
     case POST_PEDIDO:
+      console.log(payload[0].id_pedido);
+      console.log(state.pedidos);
       return {
         ...state,
-        pedidos: [...state.pedidos, payload],
+        pedidos: [...state.pedidos, payload[0].id_pedido],
         loading: false,
       };
     case UPDATE_PEDIDO:

@@ -51,21 +51,41 @@ export const createPedido = (formData) => async (dispatch) => {
       },
     };
 
+    // Create a deep copy of formData to avoid modifying the original object
+    const modifiedFormData = JSON.parse(JSON.stringify(formData));
+
+    // Convert cantidad to Number for each product
+    modifiedFormData.listaProductos = modifiedFormData.listaProductos.map(
+      (product) => ({
+        ...product,
+        cantidad: Number(product.cantidad),
+      })
+    );
+
     const res = await axios.post(
       "http://localhost:8080/pedido/crear",
-      formData,
+      modifiedFormData,
       config
     );
+
+    console.log("Server response:", res.data);
 
     dispatch({
       type: POST_PEDIDO,
       payload: res.data,
     });
+
+    return res.data; // Return the created pedido data
   } catch (err) {
+    console.error("Error creating pedido:", err);
     dispatch({
       type: PEDIDO_ERROR,
-      payload: { msg: err.response.statusText, status: err.response.status },
+      payload: {
+        msg: err.response ? err.response.statusText : "Server error",
+        status: err.response ? err.response.status : 500,
+      },
     });
+    throw err; // Re-throw the error so it can be caught in the component
   }
 };
 

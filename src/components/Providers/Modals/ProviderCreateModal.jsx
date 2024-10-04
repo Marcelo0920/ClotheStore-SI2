@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ProviderModal from "./ProviderModal";
+import { createProvider } from "../../../actions/provider";
 
-const ProviderCreateModal = ({ open, onClose, onSave }) => {
+const ProviderCreateModal = ({ open, onClose, createProvider }) => {
   const [formData, setFormData] = useState({
     nombre: "",
     encargado: "",
@@ -15,7 +18,8 @@ const ProviderCreateModal = ({ open, onClose, onSave }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    createProvider(formData);
+    setFormData({ nombre: "", encargado: "", contacto: "" });
     onClose();
   };
 
@@ -53,4 +57,10 @@ const ProviderCreateModal = ({ open, onClose, onSave }) => {
   );
 };
 
-export default ProviderCreateModal;
+ProviderCreateModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  createProvider: PropTypes.func.isRequired,
+};
+
+export default connect(null, { createProvider })(ProviderCreateModal);

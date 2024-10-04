@@ -1,33 +1,44 @@
 import React from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
 
-const OrderSummary = () => {
+const OrderSummary = ({ cart: { items, total }, onSubmit }) => {
+  const shippingCost = 10;
+  const discountThreshold = 200;
+  const discountRate = 0.05; // 5%
+
+  const subtotal = total;
+  const discountAmount =
+    subtotal > discountThreshold ? subtotal * discountRate : 0;
+  const grandTotal = subtotal + shippingCost - discountAmount;
+
   return (
     <div className="order-details">
       <div className="single-widget">
-        <h2>CART TOTALS</h2>
+        <h2>TOTAL CARRITO</h2>
         <div className="content">
           <ul>
             <li>
-              Sub Total<span>$330.00</span>
+              Sub Total<span>${subtotal.toFixed(2)}</span>
             </li>
             <li>
-              (+) Shipping<span>$10.00</span>
+              (+) Envio<span>${shippingCost.toFixed(2)}</span>
+            </li>
+            <li>
+              (-) Descuento<span>${discountAmount.toFixed(2)}</span>
             </li>
             <li className="last">
-              Total<span>$340.00</span>
+              Total<span>${grandTotal.toFixed(2)}</span>
             </li>
           </ul>
         </div>
       </div>
       <div className="single-widget">
-        <h2>Payments</h2>
+        <h2>Pago</h2>
         <div className="content">
           <div className="checkbox">
-            <label className="checkbox-inline" htmlFor="1">
-              <input name="updates" id="1" type="checkbox" /> Check Payments
-            </label>
             <label className="checkbox-inline" htmlFor="2">
-              <input name="news" id="2" type="checkbox" /> Cash On Delivery
+              <input name="news" id="2" type="checkbox" /> Efectivo
             </label>
             <label className="checkbox-inline" htmlFor="3">
               <input name="news" id="3" type="checkbox" /> PayPal
@@ -43,14 +54,33 @@ const OrderSummary = () => {
       <div className="single-widget get-button">
         <div className="content">
           <div className="button">
-            <a href="#" className="btn">
-              proceed to checkout
+            <a style={{ cursor: "pointer" }} className="btn" onClick={onSubmit}>
+              Realizar Venta
             </a>
           </div>
         </div>
       </div>
+      {discountAmount > 0 && (
+        <div className="single-widget">
+          <div className="content">
+            <p>
+              ¡Felicidades! Has obtenido un descuento del 5% por compras mayores
+              a $200.
+            </p>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
 
-export default OrderSummary;
+OrderSummary.propTypes = {
+  cart: PropTypes.object.isRequired,
+  onSubmit: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  cart: state.cart,
+});
+
+export default connect(mapStateToProps, {})(OrderSummary);

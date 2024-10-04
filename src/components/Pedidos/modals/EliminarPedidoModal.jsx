@@ -1,7 +1,14 @@
 import React from "react";
+import { connect } from "react-redux";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { deletePedido } from "../../../actions/pedido";
 
-const EliminarPedidoModal = ({ open, onClose, onConfirm, pedidoId }) => {
+const EliminarPedidoModal = ({ open, onClose, pedidoId, deletePedido }) => {
+  const handleConfirm = () => {
+    deletePedido(pedidoId);
+    onClose();
+  };
+
   return (
     <ProviderModal open={open} onClose={onClose} title="Eliminar Pedido">
       <p>¿Está seguro que desea eliminar el pedido #{pedidoId}?</p>
@@ -18,7 +25,7 @@ const EliminarPedidoModal = ({ open, onClose, onConfirm, pedidoId }) => {
           Cancelar
         </button>
         <button
-          onClick={onConfirm}
+          onClick={handleConfirm}
           className="btn"
           style={{ backgroundColor: "#dc3545", color: "white" }}
         >
@@ -29,4 +36,4 @@ const EliminarPedidoModal = ({ open, onClose, onConfirm, pedidoId }) => {
   );
 };
 
-export default EliminarPedidoModal;
+export default connect(null, { deletePedido })(EliminarPedidoModal);

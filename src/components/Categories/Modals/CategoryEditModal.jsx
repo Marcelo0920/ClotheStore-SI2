@@ -1,7 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { updateCategory } from "../../../actions/category";
 
-const CategoryEditModal = ({ open, onClose, onSave, category }) => {
+const CategoryEditModal = ({ open, onClose, updateCategory, category }) => {
   const [formData, setFormData] = useState({
     id: "",
     nombre: "",
@@ -24,7 +27,7 @@ const CategoryEditModal = ({ open, onClose, onSave, category }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    updateCategory(formData.id, formData);
     onClose();
   };
 
@@ -60,4 +63,11 @@ const CategoryEditModal = ({ open, onClose, onSave, category }) => {
   );
 };
 
-export default CategoryEditModal;
+CategoryEditModal.propTypes = {
+  updateCategory: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  category: PropTypes.object,
+};
+
+export default connect(null, { updateCategory })(CategoryEditModal);

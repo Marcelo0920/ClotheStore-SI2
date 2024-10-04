@@ -13,6 +13,8 @@ export const getWarehouses = () => async (dispatch) => {
   try {
     const res = await axios.get("http://localhost:8080/almacen/read");
 
+    console.log(res);
+
     dispatch({
       type: GET_WARE_HOUSES,
       payload: res.data,

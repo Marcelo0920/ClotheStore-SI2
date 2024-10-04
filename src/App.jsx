@@ -24,6 +24,7 @@ import ProtectedRoute from "./security/ProtectedRoute";
 import store from "./store";
 import { loadUser } from "./actions/auth";
 import setAuthToken from "./utils/setAuthToken";
+import FacturaEditListPage from "./pages/FacturaEditListPage";
 
 if (localStorage.getItem("token")) {
   setAuthToken(localStorage.getItem("token"));
@@ -136,6 +137,15 @@ const App = () => {
           element={
             <ProtectedRoute>
               <ClientEditListPage />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/facturas"
+          element={
+            <ProtectedRoute>
+              <FacturaEditListPage />
             </ProtectedRoute>
           }
         />

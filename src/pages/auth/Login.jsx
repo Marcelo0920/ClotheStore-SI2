@@ -20,7 +20,6 @@ const Login = ({ login, isAuthenticated, loading, error }) => {
     password: "",
   });
 
-  console.log("cargando login");
 
   useEffect(() => {
     if (error == "Bad Login") {

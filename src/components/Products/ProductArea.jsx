@@ -1,12 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import ProductTabs from "./ProductTabs";
 import ProductList from "./ProductList";
+import { getCategories } from "../../actions/category";
+import { getProducts } from "../../actions/product";
 
-const ProductArea = () => {
-  const [activeTab, setActiveTab] = useState("man");
+const ProductArea = ({ categories, products, getCategories, getProducts }) => {
+  const [activeCategory, setActiveCategory] = useState(null);
 
-  const handleTabChange = (tab) => {
-    setActiveTab(tab);
+  useEffect(() => {
+    getCategories();
+    getProducts(); // Fetch all products once
+  }, [getCategories, getProducts]);
+
+  useEffect(() => {
+    if (categories.length > 0 && !activeCategory) {
+      setActiveCategory(categories[0].id);
+    }
+  }, [categories, activeCategory]);
+
+  const handleTabChange = (categoryId) => {
+    setActiveCategory(categoryId);
   };
 
   return (
@@ -15,7 +29,7 @@ const ProductArea = () => {
         <div className="row">
           <div className="col-12">
             <div className="section-title">
-              <h2>Trending Item</h2>
+              <h2>Productos en Tendencia</h2>
             </div>
           </div>
         </div>
@@ -23,11 +37,15 @@ const ProductArea = () => {
           <div className="col-12">
             <div className="product-info">
               <ProductTabs
-                activeTab={activeTab}
+                activeCategory={activeCategory}
                 onTabChange={handleTabChange}
+                categories={categories}
               />
               <div className="tab-content" id="myTabContent">
-                <ProductList activeTab={activeTab} />
+                <ProductList
+                  activeCategory={activeCategory}
+                  products={products}
+                />
               </div>
             </div>
           </div>
@@ -37,4 +55,11 @@ const ProductArea = () => {
   );
 };
 
-export default ProductArea;
+const mapStateToProps = (state) => ({
+  categories: state.category.categories,
+  products: state.product.products,
+});
+
+export default connect(mapStateToProps, { getCategories, getProducts })(
+  ProductArea
+);

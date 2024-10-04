@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import Header from "../components/Header/Header";
 import Breadcrumbs from "../components/ShoppingCart/BreadCrumbs";
 import Footer from "../components/Footer";
@@ -7,40 +9,20 @@ import ProviderCreateModal from "../components/Providers/Modals/ProviderCreateMo
 import ProviderEditModal from "../components/Providers/Modals/ProviderEditModal";
 import ProviderDeleteModal from "../components/Providers/Modals/ProviderDeleteModal";
 import ProviderList from "../components/Providers/ProviderList";
+import { getProviders } from "../actions/provider";
 
-const ProviderEditListPage = () => {
-  const [providers, setProviders] = useState([
-    {
-      id: 1,
-      nombre: "sport",
-      encargado: "romero",
-      contacto: "123123",
-    },
-    {
-      id: 2,
-      nombre: "XYZ Distribution",
-      encargado: "Jane Smith",
-      contacto: "456456",
-    },
-    {
-      id: 3,
-      nombre: "123 Wholesalers",
-      encargado: "Bob Johnson",
-      contacto: "789789",
-    },
-  ]);
-
-  const warehouses = [
-    { id: 1, nombre: "Almacén Central" },
-    { id: 2, nombre: "Almacén Norte" },
-    // ... more warehouses
-  ];
-
+const ProviderEditListPage = ({
+  getProviders,
+  provider: { providers, loading },
+}) => {
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [currentProvider, setCurrentProvider] = useState(null);
-  const [showCrearPedidoModal, setShowCrearPedidoModal] = useState(false);
+
+  useEffect(() => {
+    getProviders();
+  }, [getProviders]);
 
   const handleShowCreateModal = () => setShowCreateModal(true);
   const handleCloseCreateModal = () => setShowCreateModal(false);
@@ -63,45 +45,21 @@ const ProviderEditListPage = () => {
     setCurrentProvider(null);
   };
 
-  const handleSaveProvider = (providerData) => {
-    if (providerData.id) {
-      setProviders(
-        providers.map((p) => (p.id === providerData.id ? providerData : p))
-      );
-    } else {
-      const newProvider = {
-        ...providerData,
-        id: Date.now(),
-      };
-      setProviders([...providers, newProvider]);
-    }
-    handleCloseCreateModal();
-    handleCloseEditModal();
-  };
-
-  const handleDeleteProvider = () => {
-    setProviders(providers.filter((p) => p.id !== currentProvider.id));
-    handleCloseDeleteModal();
-  };
-
   return (
     <>
       <ProviderCreateModal
         open={showCreateModal}
         onClose={handleCloseCreateModal}
-        onSave={handleSaveProvider}
       />
       <ProviderEditModal
         open={showEditModal}
         onClose={handleCloseEditModal}
-        onSave={handleSaveProvider}
         provider={currentProvider}
       />
       <ProviderDeleteModal
         open={showDeleteModal}
         onClose={handleCloseDeleteModal}
-        onConfirm={handleDeleteProvider}
-        providerName={currentProvider?.nombre}
+        provider={currentProvider}
       />
       <Header />
       <Breadcrumbs current="Provider List" />
@@ -133,4 +91,13 @@ const ProviderEditListPage = () => {
   );
 };
 
-export default ProviderEditListPage;
+ProviderEditListPage.propTypes = {
+  getProviders: PropTypes.func.isRequired,
+  provider: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  provider: state.provider,
+});
+
+export default connect(mapStateToProps, { getProviders })(ProviderEditListPage);

@@ -14,7 +14,7 @@ const VentasList = ({ ventas, onDelete }) => {
                   <th>FECHA</th>
                   <th>CLIENTE</th>
                   <th>TOTAL</th>
-                  <th>DESCUENTO</th>
+                  <th>TOTAL DESPUES DE DESCUENTO</th>
                   <th className="text-center">ACCIONES</th>
                 </tr>
               </thead>
@@ -22,7 +22,11 @@ const VentasList = ({ ventas, onDelete }) => {
                 {ventas.map((venta) => (
                   <VentaItem
                     key={venta.id}
-                    venta={venta}
+                    id={venta.id}
+                    fecha={venta.fecha}
+                    cliente={venta.id_cliente.nombre}
+                    total={venta.total}
+                    descuento={venta.total_descuento}
                     onDelete={() => onDelete(venta)}
                   />
                 ))}

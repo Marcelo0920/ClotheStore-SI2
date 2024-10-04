@@ -15,7 +15,7 @@ const CategoryList = ({ categories, onEdit, onDelete }) => {
                   <th className="text-center">ACCIONES</th>
                 </tr>
               </thead>
-              <tbody>
+              <tbody className="text-center">
                 {categories.map((category) => (
                   <tr key={category.id}>
                     <td>{category.id}</td>

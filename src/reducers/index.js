@@ -12,6 +12,8 @@ import role from "./role";
 import sucursal from "./sucursal";
 import user from "./user";
 import venta from "./venta";
+import category from "./category";
+import cart from "./cart";
 
 export default combineReducers({
   auth,
@@ -26,4 +28,6 @@ export default combineReducers({
   sucursal,
   user,
   venta,
+  category,
+  cart,
 });

@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+
 import Header from "../components/Header/Header";
 import Breadcrumbs from "../components/ShoppingCart/BreadCrumbs";
 import Footer from "../components/Footer";
@@ -8,38 +11,28 @@ import EliminarPedidoModal from "../components/Pedidos/modals/EliminarPedidoModa
 import PedidoEditModal from "../components/Pedidos/modals/PedidoEditModal";
 import PedidoList from "../components/Pedidos/PedidoList";
 
-const PedidosEditListPage = () => {
-  const [pedidos, setPedidos] = useState([
-    // Mock data, replace with actual data source
-    {
-      id: 1,
-      id_almacen: 1,
-      id_proveedor: 1,
-      productos: [{ id_producto: 1, cantidad: 10 }],
-    },
-    {
-      id: 2,
-      id_almacen: 2,
-      id_proveedor: 2,
-      productos: [{ id_producto: 2, cantidad: 5 }],
-    },
-  ]);
+import { getPedidos } from "../actions/pedido";
+import { getProviders } from "../actions/provider";
+import { getWarehouses } from "../actions/almacen";
 
+const PedidosEditListPage = ({
+  getPedidos,
+  getProviders,
+  getWarehouses,
+  pedido: { pedidos },
+  provider: { providers },
+  almacen: { warehouses },
+}) => {
   const [showCrearModal, setShowCrearModal] = useState(false);
   const [showEditarModal, setShowEditarModal] = useState(false);
   const [showEliminarModal, setShowEliminarModal] = useState(false);
   const [currentPedido, setCurrentPedido] = useState(null);
 
-  // Mock data for providers and warehouses, replace with actual data source
-  const providers = [
-    { id: 1, nombre: "Proveedor 1" },
-    { id: 2, nombre: "Proveedor 2" },
-  ];
-
-  const warehouses = [
-    { id: 1, nombre: "Almacén Central" },
-    { id: 2, nombre: "Almacén Norte" },
-  ];
+  useEffect(() => {
+    getPedidos();
+    getProviders();
+    getWarehouses();
+  }, [getPedidos, getProviders, getWarehouses]);
 
   const handleShowCrearModal = () => setShowCrearModal(true);
   const handleCloseCrearModal = () => setShowCrearModal(false);
@@ -60,25 +53,6 @@ const PedidosEditListPage = () => {
   const handleCloseEliminarModal = () => {
     setShowEliminarModal(false);
     setCurrentPedido(null);
-  };
-
-  const handleSavePedido = (pedidoData) => {
-    if (pedidoData.id) {
-      setPedidos(pedidos.map((p) => (p.id === pedidoData.id ? pedidoData : p)));
-    } else {
-      const newPedido = {
-        ...pedidoData,
-        id: Date.now(), // This is a simple way to generate a unique id. In a real app, this would typically be done by the backend.
-      };
-      setPedidos([...pedidos, newPedido]);
-    }
-    handleCloseCrearModal();
-    handleCloseEditarModal();
-  };
-
-  const handleDeletePedido = () => {
-    setPedidos(pedidos.filter((p) => p.id !== currentPedido.id));
-    handleCloseEliminarModal();
   };
 
   return (
@@ -109,14 +83,12 @@ const PedidosEditListPage = () => {
       <CrearPedidoModal
         open={showCrearModal}
         onClose={handleCloseCrearModal}
-        onSave={handleSavePedido}
         providers={providers}
         warehouses={warehouses}
       />
       <PedidoEditModal
         open={showEditarModal}
         onClose={handleCloseEditarModal}
-        onSave={handleSavePedido}
         pedido={currentPedido}
         providers={providers}
         warehouses={warehouses}
@@ -124,11 +96,29 @@ const PedidosEditListPage = () => {
       <EliminarPedidoModal
         open={showEliminarModal}
         onClose={handleCloseEliminarModal}
-        onConfirm={handleDeletePedido}
         pedidoId={currentPedido?.id}
       />
     </>
   );
 };
 
-export default PedidosEditListPage;
+PedidosEditListPage.propTypes = {
+  getWarehouses: PropTypes.func.isRequired,
+  getPedidos: PropTypes.func.isRequired,
+  getProviders: PropTypes.func.isRequired,
+  almacen: PropTypes.object.isRequired,
+  pedido: PropTypes.object.isRequired,
+  provider: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  pedido: state.pedido,
+  provider: state.provider,
+  almacen: state.almacen,
+});
+
+export default connect(mapStateToProps, {
+  getPedidos,
+  getProviders,
+  getWarehouses,
+})(PedidosEditListPage);

@@ -144,11 +144,15 @@ export const openCaja = (formData) => async (dispatch) => {
       },
     };
 
+    console.log(formData);
+
     const res = await axios.post(
-      "http://localhost:8080/caja/usuario/abrir",
+      "http://localhost:8080/caja_usuario/abrir",
       formData,
       config
     );
+
+    console.log(res);
 
     dispatch({
       type: OPEN_CAJA,
@@ -165,7 +169,7 @@ export const openCaja = (formData) => async (dispatch) => {
 // Get user's caja
 export const getUserCaja = (userId) => async (dispatch) => {
   try {
-    const res = await axios.get(`http://localhost:8080/caja/usuario/${userId}`);
+    const res = await axios.get(`http://localhost:8080/caja_usuario/${userId}`);
 
     dispatch({
       type: GET_USER_CAJA,
@@ -189,7 +193,7 @@ export const closeCaja = (formData) => async (dispatch) => {
     };
 
     const res = await axios.post(
-      "http://localhost:8080/caja/usuario/cerrar",
+      " http://localhost:8080/caja_usuario/cerrar",
       formData,
       config
     );
@@ -216,7 +220,7 @@ export const getCajaArqueo = (formData) => async (dispatch) => {
     };
 
     const res = await axios.post(
-      "http://localhost:8080/caja/usuario/arqueo",
+      "http://localhost:8080/caja_usuario/arqueo",
       formData,
       config
     );

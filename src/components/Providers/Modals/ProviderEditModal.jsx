@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
+import ProviderModal from "./ProviderModal";
+import { updateProvider } from "../../../actions/provider";
 
-const ProviderEditModal = ({ open, onClose, onSave, provider }) => {
+const ProviderEditModal = ({ open, onClose, provider, updateProvider }) => {
   const [formData, setFormData] = useState({
     nombre: "",
     encargado: "",
@@ -18,54 +22,53 @@ const ProviderEditModal = ({ open, onClose, onSave, provider }) => {
   const onChange = (e) =>
     setFormData({ ...formData, [e.target.name]: e.target.value });
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    updateProvider(provider.id, formData);
     onClose();
   };
 
   if (!open) return null;
 
   return (
-    <div className="overlay">
-      <div className="modalContainer">
-        <p className="gameModalClose" onClick={onClose}>
-          X
-        </p>
-        <div className="modal-content">
-          <h3>Editar Proveedor</h3>
-          <form className="modal-form" onSubmit={handleSubmit}>
-            <div className="modal-input">
-              <input
-                name="nombre"
-                value={nombre}
-                onChange={onChange}
-                placeholder="Nombre Proveedor"
-                required
-              />
-              <input
-                name="encargado"
-                value={encargado}
-                onChange={onChange}
-                placeholder="Encargado"
-                required
-              />
-              <input
-                name="contacto"
-                value={contacto}
-                onChange={onChange}
-                placeholder="Contacto"
-                required
-              />
-            </div>
-            <button type="submit" className="create-button">
-              Guardar Cambios
-            </button>
-          </form>
+    <ProviderModal open={open} onClose={onClose} title="Editar Proveedor">
+      <form className="modal-form" onSubmit={handleSubmit}>
+        <div className="modal-input">
+          <input
+            name="nombre"
+            value={nombre}
+            onChange={onChange}
+            placeholder="Nombre Proveedor"
+            required
+          />
+          <input
+            name="encargado"
+            value={encargado}
+            onChange={onChange}
+            placeholder="Encargado"
+            required
+          />
+          <input
+            name="contacto"
+            value={contacto}
+            onChange={onChange}
+            placeholder="Contacto"
+            required
+          />
         </div>
-      </div>
-    </div>
+        <button type="submit" className="create-button">
+          Guardar Cambios
+        </button>
+      </form>
+    </ProviderModal>
   );
 };
 
-export default ProviderEditModal;
+ProviderEditModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  provider: PropTypes.object,
+  updateProvider: PropTypes.func.isRequired,
+};
+
+export default connect(null, { updateProvider })(ProviderEditModal);

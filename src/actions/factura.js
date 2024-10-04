@@ -61,6 +61,8 @@ export const createFactura = (formData) => async (dispatch) => {
       type: CREATE_FACTURA,
       payload: res.data,
     });
+
+    return res.data;
   } catch (err) {
     dispatch({
       type: FACTURA_ERROR,

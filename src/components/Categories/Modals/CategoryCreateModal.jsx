@@ -1,7 +1,10 @@
 import React, { useState } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { createCategory } from "../../../actions/category";
 
-const CategoryCreateModal = ({ open, onClose, onSave }) => {
+const CategoryCreateModal = ({ open, onClose, createCategory }) => {
   const [formData, setFormData] = useState({
     nombre: "",
     descripcion: "",
@@ -17,7 +20,7 @@ const CategoryCreateModal = ({ open, onClose, onSave }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    onSave(formData);
+    createCategory(formData);
     setFormData({ nombre: "", descripcion: "" });
     onClose();
   };
@@ -54,4 +57,10 @@ const CategoryCreateModal = ({ open, onClose, onSave }) => {
   );
 };
 
-export default CategoryCreateModal;
+CategoryCreateModal.propTypes = {
+  createCategory: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+};
+
+export default connect(null, { createCategory })(CategoryCreateModal);

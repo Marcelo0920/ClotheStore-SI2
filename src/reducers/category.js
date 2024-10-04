@@ -1,15 +1,15 @@
 import {
-  GET_ORDEN,
-  GET_ORDENES,
-  CREATE_ORDEN,
-  UPDATE_ORDEN,
-  DELETE_ORDEN,
-  ORDEN_ERROR,
+  GET_CATEGORY,
+  GET_CATEGORIES,
+  CREATE_CATEGORY,
+  UPDATE_CATEGORY,
+  DELETE_CATEGORY,
+  CATEGORY_ERROR,
 } from "../actions/types";
 
 const initialState = {
-  ordenes: [],
-  orden: null,
+  categories: [],
+  category: null,
   loading: true,
   error: {},
 };
@@ -18,40 +18,41 @@ export default function (state = initialState, action) {
   const { type, payload } = action;
 
   switch (type) {
-    case GET_ORDENES:
+    case GET_CATEGORIES:
       return {
         ...state,
-        ordenes: payload,
+        categories: payload,
         loading: false,
       };
-    case GET_ORDEN:
+    case GET_CATEGORY:
       return {
         ...state,
-        orden: payload,
+        category: payload,
         loading: false,
       };
-    case CREATE_ORDEN:
+    case CREATE_CATEGORY:
       return {
         ...state,
-        ordenes: [...state.ordenes, payload],
-        orden: payload.id,
+        categories: [...state.categories, payload],
         loading: false,
       };
-    case UPDATE_ORDEN:
+    case UPDATE_CATEGORY:
       return {
         ...state,
-        ordenes: state.ordenes.map((orden) =>
-          orden.id === payload.id ? payload : orden
+        categories: state.categories.map((category) =>
+          category.id === payload.id ? payload : category
         ),
         loading: false,
       };
-    case DELETE_ORDEN:
+    case DELETE_CATEGORY:
       return {
         ...state,
-        ordenes: state.ordenes.filter((orden) => orden.id !== payload),
+        categories: state.categories.filter(
+          (category) => category.id !== payload
+        ),
         loading: false,
       };
-    case ORDEN_ERROR:
+    case CATEGORY_ERROR:
       return {
         ...state,
         error: payload,

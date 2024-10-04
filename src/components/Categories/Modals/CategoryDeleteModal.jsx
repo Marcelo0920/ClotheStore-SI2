@@ -1,10 +1,20 @@
 import React from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import ProviderModal from "../../Providers/Modals/ProviderModal";
+import { deleteCategory } from "../../../actions/category";
 
-const CategoryDeleteModal = ({ open, onClose, onConfirm, categoryName }) => {
+const CategoryDeleteModal = ({ open, onClose, deleteCategory, category }) => {
+  const handleDelete = () => {
+    if (category) {
+      deleteCategory(category.id);
+      onClose();
+    }
+  };
+
   return (
     <ProviderModal open={open} onClose={onClose} title="Eliminar Categoría">
-      <p>¿Está seguro que desea eliminar la categoría "{categoryName}"?</p>
+      <p>¿Está seguro que desea eliminar la categoría "{category?.nombre}"?</p>
       <div className="modal-actions">
         <button
           onClick={onClose}
@@ -18,7 +28,7 @@ const CategoryDeleteModal = ({ open, onClose, onConfirm, categoryName }) => {
           Cancelar
         </button>
         <button
-          onClick={onConfirm}
+          onClick={handleDelete}
           className="btn"
           style={{ backgroundColor: "#dc3545", color: "white" }}
         >
@@ -29,4 +39,11 @@ const CategoryDeleteModal = ({ open, onClose, onConfirm, categoryName }) => {
   );
 };
 
-export default CategoryDeleteModal;
+CategoryDeleteModal.propTypes = {
+  deleteCategory: PropTypes.func.isRequired,
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  category: PropTypes.object,
+};
+
+export default connect(null, { deleteCategory })(CategoryDeleteModal);

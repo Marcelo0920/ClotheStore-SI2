@@ -2,7 +2,6 @@ import React from "react";
 import PropTypes from "prop-types";
 
 const CajaItem = ({ caja, onAperturar, onCerrar, onArquear }) => {
-  console.log(caja);
   return (
     <tr>
       <td>{caja.numero}</td>

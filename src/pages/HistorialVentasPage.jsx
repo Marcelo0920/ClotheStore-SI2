@@ -1,33 +1,25 @@
-import React, { useState } from "react";
+import React, { useEffect } from "react";
+import { connect } from "react-redux";
+import PropTypes from "prop-types";
 import Header from "../components/Header/Header";
 import Breadcrumbs from "../components/ShoppingCart/BreadCrumbs";
 import Footer from "../components/Footer";
 import ShopServices from "../components/ads/ShopServices";
 import VentaDeleteModal from "../components/Ventas/Modals/VentaDeleteModal";
 import VentasList from "../components/Ventas/VentasList";
+import { getOrdenes, deleteOrden } from "../actions/venta";
 
-const HistorialVentasPage = () => {
-  const [ventas, setVentas] = useState([
-    {
-      id: 1,
-      descuento: "20.2",
-      id_cliente: "1",
-      id_metodo_pago: "1",
-      id_usuario: "1",
-      lista_ordenes: [
-        {
-          id_producto: "2",
-          cantidad: 5,
-        },
-      ],
-      fecha: "2023-09-30", // Adding a date field for display purposes
-      total: "150.80", // Adding a total field for display purposes
-    },
-    // Add more mock data as needed
-  ]);
+const HistorialVentasPage = ({
+  getOrdenes,
+  deleteOrden,
+  venta: { ordenes, loading },
+}) => {
+  useEffect(() => {
+    getOrdenes();
+  }, [getOrdenes]);
 
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [currentVenta, setCurrentVenta] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = React.useState(false);
+  const [currentVenta, setCurrentVenta] = React.useState(null);
 
   const handleShowDeleteModal = (venta) => {
     setCurrentVenta(venta);
@@ -40,7 +32,7 @@ const HistorialVentasPage = () => {
   };
 
   const handleDeleteVenta = () => {
-    setVentas(ventas.filter((v) => v.id !== currentVenta.id));
+    deleteOrden(currentVenta.id);
     handleCloseDeleteModal();
   };
 
@@ -54,7 +46,11 @@ const HistorialVentasPage = () => {
       />
       <Header />
       <Breadcrumbs current="Historial de Ventas" />
-      <VentasList ventas={ventas} onDelete={handleShowDeleteModal} />
+      {loading ? (
+        <p>Loading...</p>
+      ) : (
+        <VentasList ventas={ordenes} onDelete={handleShowDeleteModal} />
+      )}
       <ShopServices />
       <div style={{ margin: "150px 0px" }}></div>
       <Footer />
@@ -62,4 +58,16 @@ const HistorialVentasPage = () => {
   );
 };
 
-export default HistorialVentasPage;
+HistorialVentasPage.propTypes = {
+  getOrdenes: PropTypes.func.isRequired,
+  deleteOrden: PropTypes.func.isRequired,
+  venta: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = (state) => ({
+  venta: state.venta,
+});
+
+export default connect(mapStateToProps, { getOrdenes, deleteOrden })(
+  HistorialVentasPage
+);

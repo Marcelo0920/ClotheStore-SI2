@@ -1,4 +1,5 @@
 import React from "react";
+import PropTypes from "prop-types";
 
 const VentaDeleteModal = ({ open, onClose, onConfirm, ventaId }) => {
   if (!open) return null;
@@ -24,6 +25,13 @@ const VentaDeleteModal = ({ open, onClose, onConfirm, ventaId }) => {
       </div>
     </div>
   );
+};
+
+VentaDeleteModal.propTypes = {
+  open: PropTypes.bool.isRequired,
+  onClose: PropTypes.func.isRequired,
+  onConfirm: PropTypes.func.isRequired,
+  ventaId: PropTypes.number,
 };
 
 export default VentaDeleteModal;

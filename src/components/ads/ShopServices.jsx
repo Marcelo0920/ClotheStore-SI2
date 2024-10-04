@@ -4,20 +4,24 @@ const ShopServices = () => {
   const services = [
     {
       icon: "ti-rocket",
-      title: "Free shiping",
-      description: "Orders over $100",
+      title: "Envio Gratuito",
+      description: "Pedidos arriba de los $100",
     },
     {
       icon: "ti-reload",
-      title: "Free Return",
-      description: "Within 30 days returns",
+      title: "Devoluciones Gratuitas",
+      description: "Dentro de los 30 dias",
     },
     {
       icon: "ti-lock",
-      title: "Sucure Payment",
-      description: "100% secure payment",
+      title: "Pago Seguro",
+      description: "100% pago seguro",
     },
-    { icon: "ti-tag", title: "Best Peice", description: "Guaranteed price" },
+    {
+      icon: "ti-tag",
+      title: "Mejor Precio",
+      description: "Precio garantizado",
+    },
   ];
 
   return (

@@ -21,7 +21,7 @@ const AperturarCajaPage = ({
 
   const handleAperturar = async (cajaId) => {
     const payload = {
-      id_usuario: "1", // This should be dynamically set based on the logged-in user
+      id_usuario: "1",
       id_caja: cajaId.toString(),
     };
     openCaja(payload);
